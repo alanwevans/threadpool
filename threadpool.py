@@ -1,4 +1,5 @@
 import Queue
+import sys
 import threading
 
 """
@@ -133,14 +134,13 @@ if __name__ == '__main__':
     import sys
     import time
 
-    print_lock = threading.RLock()
     def done_frobnicating(rv):
         """A simple callback for frobnicate()"""
-        with print_lock: print "done_frobnicating: task: %d rv: %s" % (rv)
+        sys.stdout.write("done_frobnicating: task: %d rv: %s\n" % (rv))
 
     def frobnicate(i, pool, maxsleep = 10, otherpool = None):
             """A simple function to call on a thread."""
-            with print_lock: print "frobnicating: pool: %s task: %d" % (pool.name, i)
+            sys.stdout.write("frobnicating: pool: %s task: %d\n" % (pool.name, i))
 
             # If frobnicate was passed 'otherpool' approx 50% of the time start
             # a new task on that thread.
@@ -169,12 +169,12 @@ if __name__ == '__main__':
         pool.start()
         pool2.start()
         pool.join()
-        with print_lock: print "pool is done..."
+        sys.stdout.write("pool is done...\n")
         pool2.join()
-        with print_lock: print "pool2 is done..."
+        sys.stdout.write("pool2 is done...\n")
     except KeyboardInterrupt:
-        print ("\rGot Ctrl-C, asking threads to stop, press Ctrl-C again to "
-            "exit immediately...")
+        sys.stdout.write("\rGot Ctrl-C, asking threads to stop, press Ctrl-C again to "
+            "exit immediately...\n")
         pool.stopping = True
         pool2.stopping = True
 
